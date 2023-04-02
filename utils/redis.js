@@ -2,8 +2,14 @@
 import { createClient } from 'redis';
 import { promisify } from 'util';
 
+/**
+ * represents a Redis client
+ */
 class RedisClient {
-  constructor () {
+  /**
+   * @constructor to create a redis client and create connection to the server
+   */
+  constructor() {
     this.client = createClient();
     this.isConnected = true;
     this.client.on('error', (err) => {
@@ -15,7 +21,11 @@ class RedisClient {
     });
   }
 
-  isAlive () {
+  /**
+   * isAlive - returns if the client is connected or not
+   * @returns {boolean|*}
+   */
+  isAlive() {
     return this.isConnected;
   }
 
@@ -24,7 +34,7 @@ class RedisClient {
      * @param { String } key
      * @returns {String | Object} value stored in that key
      */
-  async get (key) {
+  async get(key) {
     return promisify(this.client.GET).bind(this.client)(key);
   }
 
@@ -35,7 +45,7 @@ class RedisClient {
      * @param {Number} duration - time for expiration
      * @returns void
      */
-  async set (key, value, duration) {
+  async set(key, value, duration) {
     await promisify(this.client.SETEX)
       .bind(this.client)(key, duration, value);
   }
@@ -45,7 +55,7 @@ class RedisClient {
    * @param {String} key The key of the item to remove.
    * @returns {Promise<void>}
    */
-  async del (key) {
+  async del(key) {
     await promisify(this.client.DEL).bind(this.client)(key);
   }
 }
