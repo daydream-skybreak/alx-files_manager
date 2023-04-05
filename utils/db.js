@@ -8,7 +8,7 @@ class DBClient {
      * constructor for creating and verifying mongodb connection
      *
       */
-  constructor () {
+  constructor() {
     this.host = process.env.DB_HOST || 'localhost';
     this.port = process.env.DB_PORT || 27017;
     this.database = process.env.DB_DATABASE || 'files_manager';
@@ -27,7 +27,7 @@ class DBClient {
      * checks whether connection was created or not
      * @returns {boolean|*}
      */
-  isAlive () {
+  isAlive() {
     return this.connected;
   }
 
@@ -35,20 +35,22 @@ class DBClient {
      * counts the number of users in file_manager db
      * @returns {Promise<*>}
      */
-  async nbUsers () {
+  async nbUsers() {
     this.db = this.client.db(this.database);
     const users = this.db.collection('users');
-    return await users.countDocuments({}, { hint: '_id_' });
+    const total = await users.countDocuments({}, { hint: '_id_' });
+    return total;
   }
 
   /**
      * counts the number of files in the file_manager db
      * @returns {Promise<*>}
      */
-  async nbFiles () {
+  async nbFiles() {
     this.db = this.client.db(this.database);
     const files = this.db.collection('files');
-    return await files.countDocuments({}, { hint: '_id_' });
+    const total = await files.countDocuments({}, { hint: '_id_' });
+    return total;
   }
 }
 
